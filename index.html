@@ -31,13 +31,41 @@ label{display:block;font-weight:700;font-size:14px;margin:8px 0}label input:not(
 <div class="note">그림을 사용하려면 <strong>images/guide-01.png ~ images/guide-06.png</strong> 이름으로 저장해 주세요. 그림을 업로드하기 전에는 안내 문구가 표시됩니다.</div>
 <div class="info-viewer">
  <div class="info-toolbar noprint"><button type="button" id="infoPrev" aria-label="이전 그림">← 이전</button><div class="info-center"><strong id="infoTitle" aria-live="polite">1장 · 건강검진 기본 원칙</strong><small id="infoPosition">1 / 6</small></div><button type="button" id="infoNext" aria-label="다음 그림">다음 →</button></div>
- <button type="button" id="infoZoomTrigger" class="info-image-button" aria-label="이미지 크게 보기"><img id="infoImage" src="images/guide-01.png" alt="건강검진 인포그래픽 1장: 기본 원칙" loading="lazy" decoding="async"><span class="info-missing" id="infoMissing" hidden>그림 파일을 아직 찾을 수 없습니다. images 폴더와 파일명을 확인해 주세요.</span></button>
+ <button type="button" id="infoZoomTrigger" class="info-image-button" aria-label="이미지 크게 보기"><img id="infoImage" src="images/guide-01.png" alt="건강검진 인포그래픽 1장: 기본 원칙" loading="lazy" decoding="async"><span class="info-missing" id="infoMissing" hidden>선택한 그림을 찾을 수 없습니다. images 폴더와 guide-01.png ~ guide-06.png 파일명을 확인해 주세요.</span></button>
  <div class="info-actions noprint"><button type="button" id="infoZoom">🔎 확대해서 보기</button><a class="info-download" id="infoDownload" href="images/guide-01.png" download="guide-01.png">⬇ 현재 그림 저장</a><a class="info-download secondary" id="infoOpen" href="images/guide-01.png" target="_blank" rel="noopener">새 탭에서 열기</a></div>
  <div class="info-thumbs" id="infoThumbs" role="group" aria-label="인포그래픽 장 선택"></div>
 </div>
 <p class="small">모바일에서는 이미지를 눌러 크게 볼 수 있습니다. 확대 화면은 닫기 버튼·Esc 키로 종료할 수 있습니다. GitHub Pages에 게시하면 6장 모두 자동으로 연결됩니다.</p>
 <dialog id="infoDialog" class="info-dialog" aria-label="인포그래픽 크게 보기"><div class="info-dialog-head"><strong id="infoDialogTitle">인포그래픽 확대</strong><button type="button" id="infoClose">닫기 ✕</button></div><img id="infoDialogImage" alt="선택한 건강검진 인포그래픽 확대 이미지"><div class="info-dialog-foot"><button type="button" id="infoDialogPrev">← 이전</button><button type="button" id="infoDialogNext">다음 →</button></div></dialog>
-</section><section class="section" id="hospitals"><h2>05. 검진센터는 어떻게 고를까요?</h2><div class="grid3"><div class="tile"><div class="icon">🏥</div><h3>전문 검진센터</h3><p><b>유리:</b> 일반검진을 한 번에 간편하게. <b>확인:</b> 검사 품질·내시경 전문성·추가 진료 연계.</p></div><div class="tile"><div class="icon">🩻</div><h3>종합병원</h3><p><b>유리:</b> 기존 질환과 검진 결과를 함께 관리. <b>확인:</b> 필요한 전문과 진료 가능 여부.</p></div><div class="tile"><div class="icon">🏛️</div><h3>대학병원</h3><p><b>유리:</b> 복잡한 병력이나 고위험 검사·시술. <b>주의:</b> 기본검진도 무조건 더 정확한 것은 아님.</p></div></div><div class="note"><b>1.5T와 3T MRI:</b> 숫자가 높다고 모든 검사에서 무조건 우월한 것은 아닙니다. 촬영 목적, 프로토콜, 판독 전문성도 중요합니다. 이전 영상자료는 CD 또는 영상 공유 방식으로 요청하면 병원을 바꿀 때 유용합니다.</div></section>
+</section>
+<script>
+// Image files are deliberately external, so replace/upload images without modifying this HTML.
+(()=>{
+ const images=[
+ ['건강검진 기본 원칙','images/guide-01.png'],
+ ['국가암검진 6종','images/guide-02.png'],
+ ['추가검사 선택 가이드 (1)','images/guide-03.png'],
+ ['추가검사 선택 가이드 (2)','images/guide-04.png'],
+ ['검진 준비와 결과 확인','images/guide-05.png'],
+ ['건강 상태별 관리 예시','images/guide-06.png']
+ ];
+ let idx=0;
+ const by=id=>document.getElementById(id), main=by('infoImage'), missing=by('infoMissing'), dialog=by('infoDialog'), zoom=by('infoDialogImage');
+ by('infoThumbs').innerHTML=images.map(([name,src],i)=>`<button type="button" data-info-index="${i}" aria-label="${i+1}장 ${name}" aria-pressed="false"><img src="${src}" alt="" loading="lazy" onerror="this.style.opacity='.25'"><small>${i+1}장</small></button>`).join('');
+ function update(){const [name,src]=images[idx];missing.hidden=true;main.hidden=false;main.src=src;main.alt=`건강검진 인포그래픽 ${idx+1}장: ${name}`;zoom.src=src;zoom.alt=main.alt;by('infoTitle').textContent=`${idx+1}장 · ${name}`;by('infoDialogTitle').textContent=`${idx+1}장 · ${name}`;by('infoPosition').textContent=`${idx+1} / ${images.length}`;by('infoDownload').href=src;by('infoDownload').download=`guide-${String(idx+1).padStart(2,'0')}.png`;by('infoOpen').href=src;by('infoPrev').disabled=idx===0;by('infoNext').disabled=idx===images.length-1;by('infoDialogPrev').disabled=idx===0;by('infoDialogNext').disabled=idx===images.length-1;by('infoThumbs').querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===idx)));}
+ function move(delta){idx=Math.max(0,Math.min(images.length-1,idx+delta));update()}
+ main.addEventListener('error',()=>{if(main.getAttribute('src')===images[idx][1]){main.hidden=true;missing.hidden=false;}});
+ by('infoPrev').addEventListener('click',()=>move(-1));by('infoNext').addEventListener('click',()=>move(1));
+ by('infoThumbs').addEventListener('click',e=>{const button=e.target.closest('[data-info-index]');if(button){idx=Number(button.dataset.infoIndex);update()}});
+ function openDialog(){if(main.hidden)return;if(typeof dialog.showModal==='function')dialog.showModal();else window.open(images[idx][1],'_blank','noopener')}
+ by('infoZoom').addEventListener('click',openDialog);by('infoZoomTrigger').addEventListener('click',openDialog);
+ by('infoClose').addEventListener('click',()=>dialog.close());by('infoDialogPrev').addEventListener('click',()=>move(-1));by('infoDialogNext').addEventListener('click',()=>move(1));
+ dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+ document.addEventListener('keydown',e=>{if(!dialog.open)return;if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1)});
+ update();
+})();
+</script>
+<section class="section" id="hospitals"><h2>05. 검진센터는 어떻게 고를까요?</h2><div class="grid3"><div class="tile"><div class="icon">🏥</div><h3>전문 검진센터</h3><p><b>유리:</b> 일반검진을 한 번에 간편하게. <b>확인:</b> 검사 품질·내시경 전문성·추가 진료 연계.</p></div><div class="tile"><div class="icon">🩻</div><h3>종합병원</h3><p><b>유리:</b> 기존 질환과 검진 결과를 함께 관리. <b>확인:</b> 필요한 전문과 진료 가능 여부.</p></div><div class="tile"><div class="icon">🏛️</div><h3>대학병원</h3><p><b>유리:</b> 복잡한 병력이나 고위험 검사·시술. <b>주의:</b> 기본검진도 무조건 더 정확한 것은 아님.</p></div></div><div class="note"><b>1.5T와 3T MRI:</b> 숫자가 높다고 모든 검사에서 무조건 우월한 것은 아닙니다. 촬영 목적, 프로토콜, 판독 전문성도 중요합니다. 이전 영상자료는 CD 또는 영상 공유 방식으로 요청하면 병원을 바꿀 때 유용합니다.</div></section>
 <section class="section" id="prepare"><h2>06. 검진 전에 그대로 따라 하는 체크리스트</h2><p class="sub">항목을 누르면 완료 표시가 남습니다. 체크 기록은 이 브라우저에만 저장되며 서버로 전송되지 않습니다.</p><div class="legend"><span>💊 약은 임의로 끊지 않기</span><span>🥣 금식은 병원 안내대로</span><span>🚗 수면내시경 후 운전 금지</span></div><div class="checklist" id="checklist"></div><div class="progress"><div id="progbar"></div></div><p class="small" id="progtext">0개 완료</p><div class="controls noprint"><button onclick="window.print()">🖨 인쇄하기</button><button class="secondary" id="copyChecklist">📋 준비사항 복사</button><button class="secondary" id="resetChecklist">체크 초기화</button></div><div class="note danger"><b>가장 중요한 안전 원칙:</b> 혈압약·당뇨약·인슐린·항응고제·항혈소판제는 일괄적으로 ‘먹는다/끊는다’고 결정하지 않습니다. 검진센터와 처방 의사에게 정확한 약 이름과 검사 종류를 알려 복약 계획을 받으세요. 임신 중 영상검사도 무조건 금지가 아니라 필요성과 위험을 비교합니다.</div></section><section class="section" id="schedule"><h2>06-1. 검진 날짜를 넣으면 준비 계획 만들기</h2><div class="grid2"><label>검진 예정일<input id="examDate" type="date"/></label><label><input id="colonoscopy" type="checkbox"/> 대장내시경 예정</label></div><div aria-live="polite" class="note" id="scheduleOutput">검진 날짜를 입력해 주세요.</div><p class="small">표시된 3일 전은 준비사항을 확인하기 위한 알림일 뿐입니다. 음식 제한 시작일, 장정결제 복용 시각, 약 조절과 금식 시각은 반드시 예약 기관의 안내를 따릅니다.</p></section><section class="section" id="meds"><h2>06-2. 약 복용 확인 질문 카드</h2><p class="sub">복용 여부에 체크하면 병원에 물어볼 문장을 만듭니다. 이 기능은 약의 중단·복용 시점을 결정하지 않습니다.</p><div class="grid2" id="medList"></div><div class="note" id="medQuestions">약 항목을 선택해 보세요.</div><div class="controls noprint"><button id="copyMed">약 관련 질문 복사</button></div></section>
 <section class="section" id="results"><h2>07. 검진 결과지를 받은 뒤 할 일</h2><div class="diagram"><div class="step"><b>첫째</b><strong>이상 소견 찾기</strong><small>어떤 장기에 무슨 이상?</small></div><div class="step"><b>둘째</b><strong>지난해와 비교</strong><small>크기·수치가 달라졌나?</small></div><div class="step"><b>셋째</b><strong>진료 필요성 확인</strong><small>언제·어느 과로 갈까?</small></div><div class="step"><b>넷째</b><strong>다음 일정 기록</strong><small>추적검사 날짜를 적기</small></div></div><div class="grid2"><div class="tile"><h3>예방 ≠ 검진 ≠ 보험</h3><p>🛡 <b>예방:</b> 금연·절주·운동·체중관리·예방접종<br/>🔎 <b>검진:</b> 질병을 조기에 찾기<br/>💳 <b>보험:</b> 치료비 부담에 대비하기</p></div><div class="tile"><h3>119·응급실 또는 신속 진료가 필요한 신호</h3><p><b>즉시 119·응급실:</b> 갑작스러운 마비·언어장애, 갑자기 시작된 극심한 두통, 심한 흉통·호흡곤란, 대량 출혈이나 실신.<br/><b>빠른 진료:</b> 반복되는 혈변·흑색변, 지속되는 두통, 원인 모를 체중 감소. 심하거나 갑자기 악화되면 응급 진료를 받으세요.</p></div></div><div class="note warn"><b>혈변의 색만으로 치질인지 대장암인지 구별할 수 없습니다.</b> 초기 암은 증상이 없을 수 있으며, 증상이 있다면 국가검진 대상 연령이 아니어도 진료가 우선입니다.</div></section><section class="section" id="history"><h2>07-1. 검사 이력·재검 기록장</h2><p class="sub">검사 결과와 의료진이 알려 준 다음 검사일을 직접 기록하세요. 저장 기록은 현재 기기에만 남습니다.</p><div class="grid3"><label>검사명<input id="historyName" placeholder="예: 대장내시경"/></label><label>검사일<input id="historyDate" type="date"/></label><label>다음 재검사일(안내받은 경우)<input id="nextDate" type="date"/></label></div><label>결과 또는 메모<input id="historyMemo" placeholder="민감정보 입력은 최소화하세요"/></label><div class="controls noprint"><button id="addHistory">기록 추가</button><button class="secondary" id="exportHistory">기록 텍스트 백업</button><button class="secondary" id="clearHistory">기록 전체 삭제</button></div><div id="historyList"></div></section>
 <section class="section" id="personal"><h2>08. 나에게 맞는 건강검진 계획 만들기</h2><p class="sub">나이·성별·관심사항을 입력하면 진료실에 가져갈 질문을 만듭니다. 개인정보는 HTML 소스에 넣지 않았습니다.</p><div class="grid2"><div class="tile"><label>현재 체중(kg, 선택) <input id="weight" max="400" min="1" placeholder="예: 70.5" step="0.1" type="number"/></label><label>키(cm, 선택) <input id="heightCm" max="240" min="80" placeholder="예: 170" step="0.1" type="number"/></label><p class="small" id="bmiInfo">키·체중 입력 시 BMI 계산</p></div><div class="tile"><strong>해당 항목 선택</strong><div id="concerns"></div></div></div><div class="note">입력값은 이 기기에서만 유지됩니다. 공유 링크에는 건강 수치나 병력이 포함되지 않습니다. 공용 PC에서는 사용 후 초기화하세요.</div><div class="tile"><h3>진료실 질문 자동 작성</h3><p id="doctorQuestions">위에서 관심사항을 선택해 주세요.</p><div class="controls noprint"><button id="copyQuestions">질문 복사</button><button class="secondary" id="clearProfile">개인 입력 초기화</button></div></div></section><section class="section" id="printCard"><h2>병원에 가져갈 A4 한 장 요약</h2><p class="sub">개인 상황과 준비사항, 약 복용 확인 질문을 정리해서 출력하세요.</p><div class="controls noprint"><button id="printOne">A4 요약만 인쇄 / PDF 저장</button><button class="secondary" id="printAll">전체 안내서 인쇄</button><button class="secondary" id="shareGuide">일반 안내 링크 복사</button></div><div class="note warn">공유 링크에는 개인 입력값을 포함하지 않습니다. 인쇄용 요약에는 사용자가 입력한 내용이 표시될 수 있으니 보관에 유의하세요.</div><div class="tile" id="summaryCard"><h3>건강검진 진료 상담용 요약</h3><div id="summaryInner">선택 항목을 입력하면 여기에 표시됩니다.</div><p class="small">이 자료는 상담 준비용이며 검진 대상 확정이나 의학적 처방이 아닙니다.</p></div></section>
@@ -128,29 +156,5 @@ $('shareGuide').addEventListener('click',()=>{let url=location.href.split('?')[0
 const origProgress=updateProgress;updateProgress=function(){origProgress();if($('summaryInner'))makeSummary()};
 terms();renderHistory();profileUpdate();
 
-// Image files are deliberately external, so replace/upload images without modifying this HTML.
-(()=>{
- const images=[
- ['건강검진 기본 원칙','images/guide-01.png'],
- ['국가암검진 6종','images/guide-02.png'],
- ['추가검사 선택 가이드 (1)','images/guide-03.png'],
- ['추가검사 선택 가이드 (2)','images/guide-04.png'],
- ['검진 준비와 결과 확인','images/guide-05.png'],
- ['건강 상태별 관리 예시','images/guide-06.png']
- ];
- let idx=0;
- const by=id=>document.getElementById(id), main=by('infoImage'), missing=by('infoMissing'), dialog=by('infoDialog'), zoom=by('infoDialogImage');
- by('infoThumbs').innerHTML=images.map(([name,src],i)=>`<button type="button" data-info-index="${i}" aria-label="${i+1}장 ${name}" aria-pressed="false"><img src="${src}" alt="" loading="lazy" onerror="this.style.opacity='.25'"><small>${i+1}장</small></button>`).join('');
- function update(){const [name,src]=images[idx];missing.hidden=true;main.hidden=false;main.src=src;main.alt=`건강검진 인포그래픽 ${idx+1}장: ${name}`;zoom.src=src;zoom.alt=main.alt;by('infoTitle').textContent=`${idx+1}장 · ${name}`;by('infoDialogTitle').textContent=`${idx+1}장 · ${name}`;by('infoPosition').textContent=`${idx+1} / ${images.length}`;by('infoDownload').href=src;by('infoDownload').download=`guide-${String(idx+1).padStart(2,'0')}.png`;by('infoOpen').href=src;by('infoPrev').disabled=idx===0;by('infoNext').disabled=idx===images.length-1;by('infoDialogPrev').disabled=idx===0;by('infoDialogNext').disabled=idx===images.length-1;by('infoThumbs').querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===idx)));}
- function move(delta){idx=Math.max(0,Math.min(images.length-1,idx+delta));update()}
- main.addEventListener('error',()=>{main.hidden=true;missing.hidden=false;});
- by('infoPrev').addEventListener('click',()=>move(-1));by('infoNext').addEventListener('click',()=>move(1));
- by('infoThumbs').addEventListener('click',e=>{const button=e.target.closest('[data-info-index]');if(button){idx=Number(button.dataset.infoIndex);update()}});
- function openDialog(){if(main.hidden)return;if(typeof dialog.showModal==='function')dialog.showModal();else window.open(images[idx][1],'_blank','noopener')}
- by('infoZoom').addEventListener('click',openDialog);by('infoZoomTrigger').addEventListener('click',openDialog);
- by('infoClose').addEventListener('click',()=>dialog.close());by('infoDialogPrev').addEventListener('click',()=>move(-1));by('infoDialogNext').addEventListener('click',()=>move(1));
- dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
- document.addEventListener('keydown',e=>{if(!dialog.open)return;if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1)});
- update();
-})();
+
 </script></body></html>
